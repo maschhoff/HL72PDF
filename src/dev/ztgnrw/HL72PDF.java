@@ -6,7 +6,10 @@
 package dev.ztgnrw;
 
 import dev.ztgnrw.htmlconverter.HtmlConverter;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -25,13 +28,50 @@ public class HL72PDF {
      */
     public static void main(String[] args) {
 
-        if (args.length < 3) {
-            System.err.println("Usage HL72PDF [cda] [stylesheet] [output filename]");
-            return;
-        };
+        if (args.length < 1) {
+            usage();
+            System.exit(1);
+        } else {
+            switch (args[0]) {
+                case "-h":
+                    usage();
+                    break;
+                case "-c":
+                    checkParameterAndConvert(args);
+                    break;
+                case "-e":
+                    checkParameterAndExtract(args);
+                    break;
+                default:
+                    usage();
+                    break;
+            }
+        }
 
-        convertToPDF(args[0], args[1], args[2]);
+    }
 
+    private static void checkParameterAndConvert(String[] args) {
+        if (args.length < 4) {
+            usage();
+            System.exit(1);
+        } else {
+
+            convertToPDF(args[1], args[2], args[3]);
+        }
+    }
+
+    private static void checkParameterAndExtract(String[] args) {
+        if (args.length < 2) {
+            usage();
+            System.exit(1);
+        } else {
+
+            try {
+                ExtractEmbeddedFiles.extractEmbeddedFiles(args[1]);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -58,6 +98,16 @@ public class HL72PDF {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * This will print the usage for this program.
+     */
+    private static void usage() {
+        System.err.println("Usage: java " + ExtractEmbeddedFiles.class.getName() + " [option] [params*]");
+        System.err.println(" -c [cda] [stylesheet] [output filename] | Create PDF from XML");
+        System.err.println(" -e [pdf file] | Extract attachement from PDF");
+        System.err.println(" -h | Prints this help");
     }
 
 }
