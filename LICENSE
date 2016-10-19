@@ -9,17 +9,23 @@ on the website of the Free Software Foundation, at
 http://www.gnu.org/copyleft/lesser.html, and in our distributions under
 LICENSE-LGPL-2.1
 
+More Information www.ztg-nrw.de www.hl7.de // Mathias Aschhoff m.aschhoff@ztg-nrw.de
+
 HL72PDF relies on several other free or open source projects in 
 order to build and run. Where binary Java JAR files are included, we include
 only the unmodified binary releases as provided by those other projects. 
 Source code for the respective projects can be found on the project 
 websites, listed below.
 
-Java projects that are used for building and running Flying Saucer are:
+Java projects that are used for building and running HL72PDF are:
 
 Apache Xalan
 License: Apache License 2.0
 Using version 2.7.2
+
+Apache PDFBox 
+License: Apache License 2.0
+Using version 2.0.3
 
 FLYING SAUCER XML/CSS RENDERER 
 License: GNU Lesser General Public License (LGPL)
