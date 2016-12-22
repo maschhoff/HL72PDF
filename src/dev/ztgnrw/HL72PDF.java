@@ -6,6 +6,7 @@
 package dev.ztgnrw;
 
 import dev.ztgnrw.htmlconverter.HtmlConverter;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.logging.Level;
@@ -26,6 +27,9 @@ public class HL72PDF {
      *
      * @param args the command line arguments
      */
+    
+    private static boolean verbose;
+    
     public static void main(String[] args) {
 
         if (args.length < 1) {
@@ -38,6 +42,10 @@ public class HL72PDF {
                     break;
                 case "-c":
                     checkParameterAndConvert(args);
+                    break;
+                case "-cv":
+                    checkParameterAndConvert(args);
+                    verbose=true;
                     break;
                 case "-e":
                     checkParameterAndExtract(args);
@@ -88,24 +96,39 @@ public class HL72PDF {
             System.out.println("************* Stating the Transformation *************");
             //XML to HTML          
             TransformerFactory tFactory = TransformerFactory.newInstance();
-            Transformer transformer = tFactory.newTransformer(new StreamSource(stylesheet));
+           // Transformer transformer = tFactory.newTransformer(new StreamSource(stylesheet));
+           
+           Transformer transformer = tFactory.newTransformer(new StreamSource(stylesheet));
             StringWriter writer = new StringWriter();
             StreamResult result = new StreamResult(writer);
             transformer.transform(new StreamSource(cda_file), result);
             //HTML TO PDF with Attachment
-            HtmlConverter.fromStringToPDF(writer.toString(), output_file, cda_file);
+            HtmlConverter.fromStringToPDF(writer.toString(),createPath(cda_file), output_file, cda_file);
             System.out.println("************* The result is in " + output_file + ".pdf *************");
         } catch (Exception e) {
-            e.printStackTrace();
+            if(verbose){
+             e.printStackTrace();
+            }
         }
     }
 
+    private static String createPath(String cda_file){
+        File pathfile=new File(cda_file);
+            String path=pathfile.getParentFile().getAbsolutePath();
+            path="file:///"+path;
+            path=path.replace("\\", "/");
+            path=path+"/";
+            
+            return path;
+    }
+    
     /**
      * This will print the usage for this program.
      */
     private static void usage() {
         System.err.println("Usage: java " + ExtractEmbeddedFiles.class.getName() + " [option] [params*]");
         System.err.println(" -c [cda] [stylesheet] [output filename] | Create PDF from XML");
+        System.err.println(" -cv [cda] [stylesheet] [output filename] | Create PDF from XML with detailed output");
         System.err.println(" -e [pdf file] | Extract attachement from PDF");
         System.err.println(" -h | Prints this help");
     }
