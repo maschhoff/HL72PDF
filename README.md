@@ -7,11 +7,11 @@ You´ll find examples in the example.zip file.
 #Run it
 To run this Projekt simply set your JAVA_HOME and run
 ```
-java -jar HL72PDF.jar -c [cda file] [xslt stylesheet] [output filename]
+java -jar HL72PDF.jar -c [path to cda file] [path xslt stylesheet] [output filename without path]
 ```
 To extract the attachment on CommandLine use:
 ```
-java -jar HL72PDF.jar -e [pdf file]
+java -jar HL72PDF.jar -e [path to pdf file]
 ```
 #Embed it
 To embed this into you application simply add HL72PDF.jar to your classpath as library and call the static method convertToPDF(String cda_file, String stylesheet, String output_file)
